@@ -21,7 +21,7 @@ const server = app.listen(PORT);
 //     origin: 'http://localhost:3000',
 //   },
 // });
-const SOCKET_PORT = process.env.SOCKET_PORT || 8080;
+const SOCKET_PORT = process.env.SOCKET_PORT || 443;
 
 // DATABASE SETUP
 const DB = process.env.DATABASE.replace(
@@ -31,7 +31,8 @@ const DB = process.env.DATABASE.replace(
 
 const io = new Server({
   pingTimeout: 60000,
-  cors: '*:*',
+  cors: '*',
+  // transports: ['websocket'],
 });
 
 mongoose.connect(DB, {});
