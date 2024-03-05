@@ -26,7 +26,7 @@ const DB = process.env.DATABASE.replace(
 
 const io = new Server(server, {
   pingTimeout: 60000,
-  cors: 'http://localhost:3000',
+  cors: 'https://social-media-liard-five.vercel.app/',
 });
 
 mongoose.connect(DB, {});
