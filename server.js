@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import app from './app.js';
 import { Server } from 'socket.io';
-import { createServer } from 'node:http';
+// import { createServer } from 'node:http';
 
 process.on('uncaughtException', (err) => {
   console.log(err);
@@ -12,14 +12,15 @@ process.on('uncaughtException', (err) => {
 dotenv.config({
   path: './.env',
 });
+const PORT = process.env.PORT || 8000;
 
-const server = createServer(app);
+const server = app.listen(PORT);
+
 // const io = new Server(server, {
 //   cors: {
 //     origin: 'http://localhost:3000',
 //   },
 // });
-const PORT = process.env.PORT || 8000;
 const SOCKET_PORT = process.env.SOCKET_PORT || 8080;
 
 // DATABASE SETUP
@@ -30,12 +31,12 @@ const DB = process.env.DATABASE.replace(
 
 const io = new Server({
   pingTimeout: 60000,
-  cors: '*',
+  cors: '*:*',
 });
 
 mongoose.connect(DB, {});
 
-server.listen(PORT, () => {});
+// server.listen(PORT, () => {});
 
 io.on('connection', (socket) => {
   socket.on('setup', (userData) => {
