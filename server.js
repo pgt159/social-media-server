@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import app from './app.js';
 import { Server } from 'socket.io';
-// import { createServer } from 'node:http';
+import { createServer } from 'node:http';
 
 process.on('uncaughtException', (err) => {
   console.log(err);
@@ -12,16 +12,11 @@ process.on('uncaughtException', (err) => {
 dotenv.config({
   path: './.env',
 });
+
+const server = createServer(app);
+
 const PORT = process.env.PORT || 8000;
-
-const server = app.listen(PORT);
-
-// const io = new Server(server, {
-//   cors: {
-//     origin: 'http://localhost:3000',
-//   },
-// });
-const SOCKET_PORT = process.env.SOCKET_PORT || 443;
+const SOCKET_PORT = process.env.SOCKET_PORT || 8080;
 
 // DATABASE SETUP
 const DB = process.env.DATABASE.replace(
@@ -29,17 +24,17 @@ const DB = process.env.DATABASE.replace(
   process.env.DATABASE_PASSWORD
 );
 
-const io = new Server({
+const io = new Server(server, {
   pingTimeout: 60000,
   cors: '*',
-  // transports: ['websocket'],
 });
 
 mongoose.connect(DB, {});
 
-// server.listen(PORT, () => {});
+server.listen(PORT, () => {});
 
 io.on('connection', (socket) => {
+  console.log('connected');
   socket.on('setup', (userData) => {
     socket.join(userData?._id);
     socket.emit('connected');
@@ -95,7 +90,7 @@ io.on('connection', (socket) => {
   });
 });
 
-io.listen(SOCKET_PORT);
+// io.listen(SOCKET_PORT);
 process.on('unhandledRejection', (err) => {
   console.log('Error', err);
   console.log('UNHANDLED REJECTION! 💥 Shutting down...');
