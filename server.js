@@ -30,7 +30,7 @@ const DB = process.env.DATABASE.replace(
 
 const io = new Server({
   pingTimeout: 60000,
-  cors: process.env.NODE_ENV === '*',
+  cors: '*',
 });
 
 mongoose.connect(DB, {});
