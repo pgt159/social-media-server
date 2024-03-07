@@ -16,6 +16,7 @@ const createPost = catchAsync(async (req, res, next) => {
     userPicturePath: req.user?.picturePath,
     likes: {},
     comments: 0,
+    user: _id,
   });
   return res.status(201).json({
     status: 'Success',
@@ -67,7 +68,12 @@ const updatePost = catchAsync(async (req, res, next) => {
 });
 
 const getFeedPosts = catchAsync(async (req, res, next) => {
-  const posts = await Post.find({}).sort({ updatedAt: -1 });
+  const posts = await Post.find({})
+    .populate({
+      path: 'user',
+      select: 'picturePath',
+    })
+    .sort({ updatedAt: -1 });
   return res.status(200).json({
     status: 'Success',
     data: posts || [],

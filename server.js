@@ -35,7 +35,6 @@ mongoose.connect(DB, {});
 server.listen(PORT, () => {});
 
 io.on('connection', (socket) => {
-  console.log('connected');
   socket.on('setup', (userData) => {
     socket.join(userData?._id);
     socket.emit('connected');

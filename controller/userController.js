@@ -24,7 +24,7 @@ const getMe = catchAsync(async (req, res, next) => {
   }
   const user = await User.findById(req.user._id).populate({
     path: 'friend',
-    select: '_id firstName lastName fullName email imagePath',
+    select: '_id firstName lastName fullName email picturePath',
   });
   return res.status(200).json({
     status: 'Success',
