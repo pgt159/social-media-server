@@ -16,6 +16,11 @@ const NotificationSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    postId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Post',
+      required: true,
+    },
     isRead: {
       type: Boolean,
       required: true,
@@ -26,6 +31,6 @@ const NotificationSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+const Notification = mongoose.model('Notification', NotificationSchema);
 
-const User = mongoose.model('User', NotificationSchema);
-export default User;
+export default Notification;
